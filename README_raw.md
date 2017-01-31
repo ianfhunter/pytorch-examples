@@ -97,7 +97,7 @@ define our two-layer network as a **Module** containing several submodules.
 handled automatically by autograd.
 
 ```python
-:INCLUDE nn/two_layer_net_module.py
+:INCLUDE nn/two_layer_net_nn.py
 ```
 
 ## PyTorch: optim
@@ -221,6 +221,20 @@ b = a.cpu()
 # being a torch.LongTensor
 ```
 
+**Multiprocessing vs multithreading**
+
+In Lua, CPU parallelism for data loading and HOGWILD typically used multithreading
+via the torch `threads` package. In Python, CPU parallelism is achieved through the
+torch `multiprocessing` package. This is a simple extension of the Python `multiprocessing`
+package, that causes tensor storages to be passed between processes in shared memory.
+
+Unlike the torch threads library, arbitrary objects (e.g. whole models) can be shared
+between Python processes for HOGWILD training.
+
+The [MNIST HOGWILD example](https://github.com/pytorch/examples/blob/master/mnist_hogwild/main.py) and the
+[PyTorch data loader](https://github.com/pytorch/pytorch/blob/master/torch/utils/data/dataloader.py)
+are good examples of how to use torch multiprocessing.
+
 # Advanced Topics 
 
 ## PyTorch: Defining new autograd functions
@@ -281,7 +295,7 @@ fit a simple two-layer net:
 
 TODO @sgross
 
-## PyTorch: Control Flow + Weight Sharing
+## PyTorch: Control Flow and Weight Sharing
 As an example of dynamic graphs and weight sharing, we implement a very strange
 model: a fully-connected ReLU network that on each forward pass chooses a random
 number between 1 and 4 and uses that many hidden layers, reusing the same weights
