@@ -113,16 +113,24 @@ provides implementations of commonly used optimization algorithms.
 In this example we will use the `nn` package to define our model as before, but we
 will optimize the model using the Adam algorithm provided by the `optim` package:
 
+```python
+:INCLUDE nn/two_layer_net_optim.py
+```
+
 ## PyTorch: RNNs
 
 TODO
 
-## PyTorch: Data Loading
-
+## Data Loading
+We often want to load inputs and targets from files, instead of using random inputs. We also often want to do any preprocessing in the background to avoid slowing down the training loop. PyTorch provides two classes `torch.utils.data.Dataset` and `torch.utils.data.DataLoader` to help with data loading. `DataLoader` implements batching and shuffling. It will load the data in background processes if you set `num_workers`.
 
 ```python
-:INCLUDE nn/two_layer_net_optim.py
+:INCLUDE nn/data_loading.py
 ```
+
+PyTorch also provides a number of implementations for common datasets in the `vision` and `text` packages:
+- Vision: MNIST, LSUN, COCO, CIFAR, and generic "ImageFolder"
+- Text: SNLI, SST, and generic "Translation" and "LanguageModeling"
 
 ## PyTorch for Torch Users
 
