@@ -18,7 +18,7 @@ and the true output.
 - <a href='#pytorch-nn'>PyTorch: nn</a>
 - <a href='#pytorch-optim'>PyTorch: optim</a>
 - <a href='#pytorch-rnns'>PyTorch: RNNs</a>
-- <a href='#pytorch-data-loading'>PyTorch: Data Loading</a>
+- <a href='#data-loading'>Data Loading</a>
 - <a href='#pytorch-for-torch-users'>PyTorch for Torch Users</a>
 - <a href='#pytorch-defining-new-autograd-functions'>PyTorch: Defining new autograd functions</a>
 - <a href='#tensorflow-static-graphs'>TensorFlow: Static Graphs</a>
@@ -229,6 +229,8 @@ class TwoLayerNet(nn.Module):
     y_pred = self.linear2(h_relu)
     return y_pred
 
+model = TwoLayerNet(D_in, H, D_out)
+
 # The nn package also contains definitions of popular loss functions; in this
 # case we will use Mean Squared Error (MSE) as our loss function.
 loss_fn = nn.MSELoss(size_average=False)
@@ -273,13 +275,6 @@ provides implementations of commonly used optimization algorithms.
 
 In this example we will use the `nn` package to define our model as before, but we
 will optimize the model using the Adam algorithm provided by the `optim` package:
-
-## PyTorch: RNNs
-
-TODO
-
-## PyTorch: Data Loading
-
 
 ```python
 # Code in file nn/two_layer_net_optim.py
@@ -331,6 +326,51 @@ for t in range(500):
   # `step()` requires no arguments.
   optimizer.step()
 ```
+
+## PyTorch: RNNs
+
+TODO
+
+## Data Loading
+We often want to load inputs and targets from files, instead of using random inputs. We also often want to do any preprocessing in the background to avoid slowing down the training loop. PyTorch provides two classes `torch.utils.data.Dataset` and `torch.utils.data.DataLoader` to help with data loading. `DataLoader` implements batching and shuffling. It will load the data in background processes if you set `num_workers`.
+
+```python
+# Code in file nn/data_loading.py
+import torch
+import os
+import PIL
+from torch.utils.data import Dataset, DataLoader
+
+class MyImageDataset(Dataset):
+  def __init__(self, path):
+    self.filenames = os.listdir(path)
+
+  def __getitem__(self, i):
+    pic = Image.open(self.filenames[i])
+    # convert to RGB tensor
+    img = torch.ByteTensor(torch.ByteStorage.from_buffer(pic.tobytes()))
+    img = img.view(pic.size[1], pic.size[0], len(pic.mode))
+    img = img.transpose(0, 1).transpose(0, 2).float() / 255
+    return img
+
+  def __len__(self):
+    return len(self.filenames)
+
+dataset = MyImageDataset('./images')
+
+# load the images one at a time
+for img in dataset:
+  print(img.size())  # e.g. torch.Size(3, 28, 28)
+
+# load, batch, and shuffle images using multiple workers
+loader = DataLoader(dataset, num_workers=4, batch_size=64, shuffle=True)
+for batch in loader:
+  print(batch.size())  #e.g. torch.Size(64, 3, 28, 28)
+```
+
+PyTorch also provides a number of implementations for common datasets in the `vision` and `text` packages:
+- Vision: MNIST, LSUN, COCO, CIFAR, and generic "ImageFolder"
+- Text: SNLI, SST, and generic "Translation" and "LanguageModeling"
 
 ## PyTorch for Torch Users
 
