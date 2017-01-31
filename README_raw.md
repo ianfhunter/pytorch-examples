@@ -120,7 +120,7 @@ will optimize the model using the Adam algorithm provided by the `optim` package
 ## PyTorch: RNNs
 
 RNNs are particularly easy to write in PyTorch because of its dynamic
-graphs and imperative style. for example, here is a complete implementation of
+graphs and imperative style; for example, here is a complete implementation of
 a simple Ellman RNN.
 
 ```python
@@ -147,7 +147,7 @@ class RNN(nn.Module):
         return output, hidden
 ``` 
 
-The torch.nn.rnn package contains building blocks for RNNs, GRUs, and LSTMs. 
+The `torch.nn.rnn` package contains building blocks for RNNs, GRUs, and LSTMs. 
 These RNN modules have CuDNN support, but can also be run interchangeably without CuDNN
 (e.g. on CPU).
 
