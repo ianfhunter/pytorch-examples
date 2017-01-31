@@ -12,15 +12,8 @@ fit random data by minimizing the Euclidean distance between the network output
 and the true output.
 
 ### Table of Contents
-- <a href='#warm-up-numpy'>Warm-up: numpy</a>
-- <a href='#pytorch-tensors'>PyTorch: Tensors</a>
-- <a href='#pytorch-variables-and-autograd'>PyTorch: Variables and autograd</a>
-- <a href='#pytorch-defining-new-autograd-functions'>PyTorch: Defining new autograd functions</a>
-- <a href='#tensorflow-static-graphs'>TensorFlow: Static Graphs</a>
-- <a href='#pytorch-nn'>PyTorch: nn</a>
-- <a href='#pytorch-optim'>PyTorch: optim</a>
-- <a href='#pytorch-custom-nn-modules'>PyTorch: Custom nn Modules</a>
-- <a href='#pytorch-control-flow--weight-sharing'>PyTorch: Control Flow and Weight Sharing</a>
+
+:CONTENTS
 
 ## Warm-up: numpy
 
@@ -117,6 +110,48 @@ nonlinearity, and use it to implement our two-layer network:
 :INCLUDE autograd/two_layer_net_custom_function.py
 ```
 
+
+## PyTorch: nn
+Computational graphs and autograd are a very powerful paradigm for defining
+complex operators and automatically taking derivatives; however for large
+neural networks raw autograd can be a bit too low-level.
+
+When building neural networks we frequently think of arranging the computation
+into **modules**, some of which have **learnable parameters** which will be
+optimized during learning.
+
+In PyTorch, the `nn` package defines a set of
+**Modules**, which are roughly equivalent to neural network layers. A Module receives
+input Variables and computes output Variables, but may also hold internal state such as
+Variables containing learnable parameters. The `nn` package also defines a set of useful
+loss functions that are commonly used when training neural networks.
+
+The **Module** class is also used to assemble layers into larger structures. Here we
+define our two-layer network as a **Module** containing several submodules.
+**Module** must only implement the `forward` method; the backwards computation is
+handled automatically by autograd.
+
+```python
+:INCLUDE nn/two_layer_net_module.py
+```
+
+## PyTorch: optim
+Up to this point we have updated the weights of our models by manually mutating the
+`.data` member for Variables holding learnable parameters. This is not a huge burden
+for simple optimization algorithms like stochastic gradient descent, but in practice
+we often train neural networks using more sophisiticated optimizers like AdaGrad,
+RMSProp, Adam, etc.
+
+The `optim` package in PyTorch abstracts the idea of an optimization algorithm and
+provides implementations of commonly used optimization algorithms.
+
+In this example we will use the `nn` package to define our model as before, but we
+will optimize the model using the Adam algorithm provided by the `optim` package:
+
+```python
+:INCLUDE nn/two_layer_net_optim.py
+```
+
 ## TensorFlow: Static Graphs
 PyTorch autograd looks a lot like TensorFlow: in both frameworks we define
 a computational graph, and use automatic differentiation to compute gradients.
@@ -149,64 +184,6 @@ fit a simple two-layer net:
 
 ```python
 :INCLUDE autograd/tf_two_layer_net.py
-```
-
-
-## PyTorch: nn
-Computational graphs and autograd are a very powerful paradigm for defining
-complex operators and automatically taking derivatives; however for large
-neural networks raw autograd can be a bit too low-level.
-
-When building neural networks we frequently think of arranging the computation
-into **layers**, some of which have **learnable parameters** which will be
-optimized during learning.
-
-In TensorFlow, packages like [Keras](https://github.com/fchollet/keras),
-[TensorFlow-Slim](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/slim),
-and [TFLearn](http://tflearn.org/) provide higher-level abstractions over
-raw computational graphs that are useful for building neural networks.
-
-In PyTorch, the `nn` package serves this same purpose. The `nn` package defines a set of
-**Modules**, which are roughly equivalent to neural network layers. A Module receives
-input Variables and computes output Variables, but may also hold internal state such as
-Variables containing learnable parameters. The `nn` package also defines a set of useful
-loss functions that are commonly used when training neural networks.
-
-In this example we use the `nn` package to implement our two-layer network:
-
-```python
-:INCLUDE nn/two_layer_net_nn.py
-```
-
-
-## PyTorch: optim
-Up to this point we have updated the weights of our models by manually mutating the
-`.data` member for Variables holding learnable parameters. This is not a huge burden
-for simple optimization algorithms like stochastic gradient descent, but in practice
-we often train neural networks using more sophisiticated optimizers like AdaGrad,
-RMSProp, Adam, etc.
-
-The `optim` package in PyTorch abstracts the idea of an optimization algorithm and
-provides implementations of commonly used optimization algorithms.
-
-In this example we will use the `nn` package to define our model as before, but we
-will optimize the model using the Adam algorithm provided by the `optim` package:
-
-```python
-:INCLUDE nn/two_layer_net_optim.py
-```
-
-
-## PyTorch: Custom nn Modules
-Sometimes you will want to specify models that are more complex than a sequence of
-existing Modules; for these cases you can define your own Modules by subclassing
-`nn.Module` and defining a `forward` which receives input Variables and produces
-output Variables using other modules or other autograd operations on Variables.
-
-In this example we implement our two-layer network as a custom Module subclass:
-
-```python
-:INCLUDE nn/two_layer_net_module.py
 ```
 
 
