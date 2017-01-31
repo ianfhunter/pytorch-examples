@@ -119,9 +119,40 @@ will optimize the model using the Adam algorithm provided by the `optim` package
 
 ## PyTorch: RNNs
 
-TODO
+RNNs are particularly easy to write in PyTorch because of its dynamic
+graphs and imperative style. for example, here is a complete implementation of
+a simple Ellman RNN.
 
-## Data Loading
+```python
+class RNN(nn.Module):
+    def __init__(self, input_dim, hidden_dim):
+        super(RNN, self).__init__()
+        self.ih = nn.Linear(input_dim, hidden_dim)
+        self.hh = nn.Linear(hidden_dim, hidden_dim)
+        self.activation = nn.ReLU()  # your choice
+
+    def forward(self, input, hidden):
+        """
+        input: [seq_len x batch x input_dim] tensor
+        hidden: [batch x hidden_dim] tensor
+        """
+        output = []
+        for input_i in input:
+            hidden = self.activation(self.ih(input_i) + self.hh(hidden))
+            outputs.append(hidden)
+
+        # joins the list of 2D tensors into a single 3D tensor
+        output = torch.stack(output)
+
+        return output, hidden
+``` 
+
+The torch.nn.rnn package contains building blocks for RNNs, GRUs, and LSTMs. 
+These RNN modules have CuDNN support, but can also be run interchangeably without CuDNN
+(e.g. on CPU).
+
+
+## PyTorch: Data Loading
 We often want to load inputs and targets from files, instead of using random inputs. We also often want to do any preprocessing in the background to avoid slowing down the training loop. PyTorch provides two classes `torch.utils.data.Dataset` and `torch.utils.data.DataLoader` to help with data loading. `DataLoader` implements batching and shuffling. It will load the data in background processes if you set `num_workers`.
 
 ```python
@@ -227,6 +258,23 @@ print(type(a))
 b = a.cpu()
 # transfers it to CPU, back to 
 # being a torch.LongTensor
+```
+
+**CUDA Caching Allocator**
+
+Torch used the standard CUDA allocator, which meant that constructing and deleting
+tensors caused GPU synchronization which was very slow. This led to a design pattern
+of constructing all CUDA tensors once and only resizing them between iterations.
+
+A caching allocator was developed for PyTorch (which is now in Torch as well!),
+which removes the overhead for allocating and freeing cuda tensors. So it's now
+fine to construct tensors within your training loop, e.g.
+
+```python
+for batch in batches:
+  batch_gpu = batch.cuda()  # creates a new cuda tensor
+  out = model(batch_gpu)
+  ...
 ```
 
 **Multiprocessing vs multithreading**
