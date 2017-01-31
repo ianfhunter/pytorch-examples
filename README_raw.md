@@ -91,26 +91,6 @@ network:
 :INCLUDE autograd/two_layer_net_autograd.py
 ```
 
-## PyTorch: Defining new autograd functions
-Under the hood, each primitive autograd operator is really two functions that
-operate on Tensors. The **forward** function computes output Tensors from input
-Tensors. The **backward** function receives the gradient of the output Tensors
-with respect to some scalar value, and computes the gradient of the input Tensors
-with respect to that same scalar value.
-
-In PyTorch we can easily define our own autograd operator by defining a subclass
-of `torch.autograd.Function` and implementing the `forward` and `backward` functions.
-We can then use our new autograd operator by constructing an instance and calling it
-like a function, passing Variables containing input data.
-
-In this example we define our own custom autograd function for performing the ReLU
-nonlinearity, and use it to implement our two-layer network:
-
-```python
-:INCLUDE autograd/two_layer_net_custom_function.py
-```
-
-
 ## PyTorch: nn
 Computational graphs and autograd are a very powerful paradigm for defining
 complex operators and automatically taking derivatives; however for large
@@ -148,9 +128,37 @@ provides implementations of commonly used optimization algorithms.
 In this example we will use the `nn` package to define our model as before, but we
 will optimize the model using the Adam algorithm provided by the `optim` package:
 
+## PyTorch: RNNs
+
+
+## Data Loading
+
+
 ```python
 :INCLUDE nn/two_layer_net_optim.py
 ```
+
+# Advanced Topics 
+
+## PyTorch: Defining new autograd functions
+Under the hood, each primitive autograd operator is really two functions that
+operate on Tensors. The **forward** function computes output Tensors from input
+Tensors. The **backward** function receives the gradient of the output Tensors
+with respect to some scalar value, and computes the gradient of the input Tensors
+with respect to that same scalar value.
+
+In PyTorch we can easily define our own autograd operator by defining a subclass
+of `torch.autograd.Function` and implementing the `forward` and `backward` functions.
+We can then use our new autograd operator by constructing an instance and calling it
+like a function, passing Variables containing input data.
+
+In this example we define our own custom autograd function for performing the ReLU
+nonlinearity, and use it to implement our two-layer network:
+
+```python
+:INCLUDE autograd/two_layer_net_custom_function.py
+```
+
 
 ## TensorFlow: Static Graphs
 PyTorch autograd looks a lot like TensorFlow: in both frameworks we define
@@ -186,6 +194,9 @@ fit a simple two-layer net:
 :INCLUDE autograd/tf_two_layer_net.py
 ```
 
+# HOGWILD
+
+FIXME
 
 ## PyTorch: Control Flow + Weight Sharing
 As an example of dynamic graphs and weight sharing, we implement a very strange
