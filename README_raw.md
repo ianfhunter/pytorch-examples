@@ -140,7 +140,7 @@ class RNN(nn.Module):
         output = []
         for input_i in input:
             hidden = F.relu(self.ih(input_i) + self.hh(hidden))
-            outputs.append(hidden)
+            output.append(hidden)
 
         # joins the list of 2D tensors into a single 3D tensor
         output = torch.stack(output)
