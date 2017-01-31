@@ -37,7 +37,7 @@ loss_fn = nn.MSELoss(size_average=False)
 # SGD, Adagrad, Adadelta, and Adam. You can optimize different parts
 # of the model with different optimizers by passing a subset of
 # model.parameters() to each optimizer
-optimizer = optim.SGD(model.parameters(), lr=1e-4)
+optimizer = optim.Adam(model.parameters(), lr=1e-4)
 for t in range(500):
   y_pred = model(x)
 
