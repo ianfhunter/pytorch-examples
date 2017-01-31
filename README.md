@@ -332,12 +332,13 @@ graphs and imperative style; for example, here is a complete implementation of
 a simple Ellman RNN.
 
 ```python
+import torch.nn as nn
+import torch.nn.functional as F
 class RNN(nn.Module):
     def __init__(self, input_dim, hidden_dim):
         super(RNN, self).__init__()
         self.ih = nn.Linear(input_dim, hidden_dim)
         self.hh = nn.Linear(hidden_dim, hidden_dim)
-        self.activation = nn.ReLU()  # your choice
 
     def forward(self, input, hidden):
         """
@@ -346,7 +347,7 @@ class RNN(nn.Module):
         """
         output = []
         for input_i in input:
-            hidden = self.activation(self.ih(input_i) + self.hh(hidden))
+            hidden = F.relu(self.ih(input_i) + self.hh(hidden))
             outputs.append(hidden)
 
         # joins the list of 2D tensors into a single 3D tensor
