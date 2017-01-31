@@ -17,12 +17,10 @@ and the true output.
 - <a href='#variables-and-autograd'>Variables and autograd</a>
 - <a href='#nn-the-neural-network-library'>nn: The neural network Library</a>
 - <a href='#optim-the-optimization-library'>optim: The optimization library</a>
-- <a href='#rnns-in-pytorch'>RNNs in PyTorch</a>
-- <a href='#data-loading-in-pytorch'>Data Loading in PyTorch</a>
+- <a href='#rnns'>RNNs</a>
+- <a href='#data-loading'>Data Loading</a>
 - <a href='#pytorch-for-torch-users'>PyTorch for Torch Users</a>
-- <a href='#pytorch-defining-new-autograd-functions'>PyTorch: Defining new autograd functions</a>
-- <a href='#pytorch-vs-tensorflow-static-vs-dynamic-graphs'>PyTorch vs TensorFlow: Static vs Dynamic Graphs</a>
-- <a href='#pytorch-control-flow-and-weight-sharing'>PyTorch: Control Flow and Weight Sharing</a>
+- <a href='#advanced-topics-'>Advanced Topics </a>
 
 ## Tensors
 
@@ -327,7 +325,7 @@ for t in range(500):
   optimizer.step()
 ```
 
-## RNNs in PyTorch
+## RNNs
 
 RNNs are particularly easy to write in PyTorch because of its dynamic
 graphs and imperative style; for example, here is a complete implementation of
@@ -362,7 +360,7 @@ These RNN modules have CuDNN support, but can also be run interchangeably withou
 (e.g. on CPU).
 
 
-## Data Loading in PyTorch
+## Data Loading
 
 We often want to load inputs and targets from files, instead of using random inputs. We also often want to do any preprocessing in the background to avoid slowing down the training loop. PyTorch provides two classes `torch.utils.data.Dataset` and `torch.utils.data.DataLoader` to help with data loading. `DataLoader` implements batching and shuffling. It will load the data in background processes if you set `num_workers`.
 
@@ -532,9 +530,9 @@ The [MNIST HOGWILD example](https://github.com/pytorch/examples/blob/master/mnis
 [PyTorch data loader](https://github.com/pytorch/pytorch/blob/master/torch/utils/data/dataloader.py)
 are good examples of how to use torch multiprocessing.
 
-# Advanced Topics 
+## Advanced Topics 
 
-## PyTorch: Defining new autograd functions
+### Defining new autograd functions
 Under the hood, each primitive autograd operator is really two functions that
 operate on Tensors. The **forward** function computes output Tensors from input
 Tensors. The **backward** function receives the gradient of the output Tensors
@@ -622,7 +620,7 @@ for t in range(500):
 ```
 
 
-## PyTorch vs TensorFlow: Static vs Dynamic Graphs
+### PyTorch vs TensorFlow: Static vs Dynamic Graphs
 PyTorch autograd looks a lot like TensorFlow: in both frameworks we define
 a computational graph, and use automatic differentiation to compute gradients.
 The biggest difference between the two is that TensorFlow's computational graphs
@@ -715,7 +713,7 @@ with tf.Session() as sess:
     print(loss_value)
 ```
 
-## PyTorch: Control Flow and Weight Sharing
+### Control Flow and Weight Sharing
 As an example of dynamic graphs and weight sharing, we implement a very strange
 model: a fully-connected ReLU network that on each forward pass chooses a random
 number between 1 and 4 and uses that many hidden layers, reusing the same weights

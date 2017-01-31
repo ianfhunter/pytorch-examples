@@ -117,7 +117,7 @@ will optimize the model using the Adam algorithm provided by the `optim` package
 :INCLUDE nn/two_layer_net_optim.py
 ```
 
-## RNNs in PyTorch
+## RNNs
 
 RNNs are particularly easy to write in PyTorch because of its dynamic
 graphs and imperative style; for example, here is a complete implementation of
@@ -152,7 +152,7 @@ These RNN modules have CuDNN support, but can also be run interchangeably withou
 (e.g. on CPU).
 
 
-## Data Loading in PyTorch
+## Data Loading
 
 We often want to load inputs and targets from files, instead of using random inputs. We also often want to do any preprocessing in the background to avoid slowing down the training loop. PyTorch provides two classes `torch.utils.data.Dataset` and `torch.utils.data.DataLoader` to help with data loading. `DataLoader` implements batching and shuffling. It will load the data in background processes if you set `num_workers`.
 
@@ -292,9 +292,9 @@ The [MNIST HOGWILD example](https://github.com/pytorch/examples/blob/master/mnis
 [PyTorch data loader](https://github.com/pytorch/pytorch/blob/master/torch/utils/data/dataloader.py)
 are good examples of how to use torch multiprocessing.
 
-# Advanced Topics 
+## Advanced Topics 
 
-## PyTorch: Defining new autograd functions
+### Defining new autograd functions
 Under the hood, each primitive autograd operator is really two functions that
 operate on Tensors. The **forward** function computes output Tensors from input
 Tensors. The **backward** function receives the gradient of the output Tensors
@@ -314,7 +314,7 @@ nonlinearity, and use it to implement our two-layer network:
 ```
 
 
-## PyTorch vs TensorFlow: Static vs Dynamic Graphs
+### PyTorch vs TensorFlow: Static vs Dynamic Graphs
 PyTorch autograd looks a lot like TensorFlow: in both frameworks we define
 a computational graph, and use automatic differentiation to compute gradients.
 The biggest difference between the two is that TensorFlow's computational graphs
@@ -348,7 +348,7 @@ fit a simple two-layer net:
 :INCLUDE autograd/tf_two_layer_net.py
 ```
 
-## PyTorch: Control Flow and Weight Sharing
+### Control Flow and Weight Sharing
 As an example of dynamic graphs and weight sharing, we implement a very strange
 model: a fully-connected ReLU network that on each forward pass chooses a random
 number between 1 and 4 and uses that many hidden layers, reusing the same weights
