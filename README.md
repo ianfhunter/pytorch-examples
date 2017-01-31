@@ -13,18 +13,18 @@ and the true output.
 
 ### Table of Contents
 
-- <a href='#pytorch-tensors'>PyTorch: Tensors</a>
-- <a href='#pytorch-variables-and-autograd'>PyTorch: Variables and autograd</a>
-- <a href='#pytorch-nn'>PyTorch: nn</a>
-- <a href='#pytorch-optim'>PyTorch: optim</a>
-- <a href='#pytorch-rnns'>PyTorch: RNNs</a>
-- <a href='#pytorch-data-loading'>PyTorch: Data Loading</a>
+- <a href='#tensors'>Tensors</a>
+- <a href='#variables-and-autograd'>Variables and autograd</a>
+- <a href='#nn-the-neural-network-library'>nn: The neural network Library</a>
+- <a href='#optim-the-optimization-library'>optim: The optimization library</a>
+- <a href='#rnns-in-pytorch'>RNNs in PyTorch</a>
+- <a href='#data-loading-in-pytorch'>Data Loading in PyTorch</a>
 - <a href='#pytorch-for-torch-users'>PyTorch for Torch Users</a>
 - <a href='#pytorch-defining-new-autograd-functions'>PyTorch: Defining new autograd functions</a>
-- <a href='#tensorflow-static-graphs'>TensorFlow: Static Graphs</a>
+- <a href='#pytorch-vs-tensorflow-static-vs-dynamic-graphs'>PyTorch vs TensorFlow: Static vs Dynamic Graphs</a>
 - <a href='#pytorch-control-flow-and-weight-sharing'>PyTorch: Control Flow and Weight Sharing</a>
 
-## PyTorch: Tensors
+## Tensors
 
 Numpy is a great framework, but it cannot utilize GPUs to accelerate its
 numerical computations. For modern deep neural networks, GPUs often provide
@@ -89,7 +89,7 @@ for t in range(500):
   w2 -= learning_rate * grad_w2
 ```
 
-## PyTorch: Variables and autograd
+## Variables and autograd
 
 In the above examples, we had to manually implement both the forward and
 backward passes of our neural network. Manually implementing the backward pass
@@ -175,7 +175,7 @@ for t in range(500):
   w2.data -= learning_rate * w2.grad.data
 ```
 
-## PyTorch: nn
+## nn: The neural network Library
 Computational graphs and autograd are a very powerful paradigm for defining
 complex operators and automatically taking derivatives; however for large
 neural networks raw autograd can be a bit too low-level.
@@ -263,7 +263,7 @@ for t in range(500):
     param.data -= learning_rate * param.grad.data
 ```
 
-## PyTorch: optim
+## optim: The optimization library
 Up to this point we have updated the weights of our models by manually mutating the
 `.data` member for Variables holding learnable parameters. This is not a huge burden
 for simple optimization algorithms like stochastic gradient descent, but in practice
@@ -327,10 +327,10 @@ for t in range(500):
   optimizer.step()
 ```
 
-## PyTorch: RNNs
+## RNNs in PyTorch
 
 RNNs are particularly easy to write in PyTorch because of its dynamic
-graphs and imperative style. for example, here is a complete implementation of
+graphs and imperative style; for example, here is a complete implementation of
 a simple Ellman RNN.
 
 ```python
@@ -357,12 +357,13 @@ class RNN(nn.Module):
         return output, hidden
 ``` 
 
-The torch.nn.rnn package contains building blocks for RNNs, GRUs, and LSTMs. 
+The `torch.nn.rnn` package contains building blocks for RNNs, GRUs, and LSTMs. 
 These RNN modules have CuDNN support, but can also be run interchangeably without CuDNN
 (e.g. on CPU).
 
 
-## PyTorch: Data Loading
+## Data Loading in PyTorch
+
 We often want to load inputs and targets from files, instead of using random inputs. We also often want to do any preprocessing in the background to avoid slowing down the training loop. PyTorch provides two classes `torch.utils.data.Dataset` and `torch.utils.data.DataLoader` to help with data loading. `DataLoader` implements batching and shuffling. It will load the data in background processes if you set `num_workers`.
 
 ```python
@@ -621,7 +622,7 @@ for t in range(500):
 ```
 
 
-## TensorFlow: Static Graphs
+## PyTorch vs TensorFlow: Static vs Dynamic Graphs
 PyTorch autograd looks a lot like TensorFlow: in both frameworks we define
 a computational graph, and use automatic differentiation to compute gradients.
 The biggest difference between the two is that TensorFlow's computational graphs
@@ -713,10 +714,6 @@ with tf.Session() as sess:
                                 feed_dict={x: x_value, y: y_value})
     print(loss_value)
 ```
-
-# PyTorch: HOGWILD
-
-TODO @sgross
 
 ## PyTorch: Control Flow and Weight Sharing
 As an example of dynamic graphs and weight sharing, we implement a very strange
