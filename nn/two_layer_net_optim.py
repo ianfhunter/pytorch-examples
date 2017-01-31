@@ -48,7 +48,7 @@ for t in range(500):
 
   loss.backward()
 
-  # Performs one SGD step on the parameters.
+  # Performs one Adam step on the parameters.
   # Since the gradients are stored inside the parameter Variables,
   # `step()` requires no arguments.
   optimizer.step()
