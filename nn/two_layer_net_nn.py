@@ -39,6 +39,8 @@ class TwoLayerNet(nn.Module):
     y_pred = self.linear2(h_relu)
     return y_pred
 
+model = TwoLayerNet(D_in, H, D_out)
+
 # The nn package also contains definitions of popular loss functions; in this
 # case we will use Mean Squared Error (MSE) as our loss function.
 loss_fn = nn.MSELoss(size_average=False)
