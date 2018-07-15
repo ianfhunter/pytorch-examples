@@ -20,7 +20,7 @@ and the true output.
 - <a href='#rnns'>RNNs</a>
 - <a href='#data-loading'>Data Loading</a>
 - <a href='#pytorch-for-torch-users'>PyTorch for Torch Users</a>
-- <a href='#advanced-topics-'>Advanced Topics </a>
+- <a href='#advanced-topics'>Advanced Topics </a>
 
 ## Tensors
 
